@@ -1,5 +1,6 @@
-🔗 **Live Demo:https://ai-summarizer-frontend-beige.vercel.app/
-⚙️ **Backend API:https://ai-summarizer-app.hostless.app
+🔗 **Live Demo:** https://ai-summarizer-frontend-beige.vercel.app/
+⚙️ **Backend API:** https://ai-summarizer-app.hostless.app/health 
+*(Note: Backend is an API. You can check its health status at `/health`.)*
 ![AI Summarizer Screenshot] <img width="1107" height="690" alt="Screenshot 2026-11-07 230432" src="https://github.com/user-attachments/assets/7eea01e4-1b88-4c9b-a39d-c6ce326a695d" />
 
 
@@ -8,7 +9,7 @@
 This is the backend server for the AI Text Summarizer application. It provides a RESTful API that utilizes Google Gemini AI to generate concise summaries from long text inputs.
 
 ## 🚀 Features
-- **AI Integration:** Powered by Google Gemini API (`gemini-2.0-flash` model).
+- **AI Integration:** Powered by Google Gemini API (`gemini-1.5-flash` model).
 - **Custom Summaries:** Supports short, medium, and long summary lengths.
 - **Security:** Includes rate limiting (max 10 requests/min per IP) and restricted CORS.
 - **Input Validation:** Prevents empty requests and limits text length to 10,000 characters to save API costs.
