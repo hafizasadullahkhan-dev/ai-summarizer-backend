@@ -9,7 +9,7 @@
 This is the backend server for the AI Text Summarizer application. It provides a RESTful API that utilizes Google Gemini AI to generate concise summaries from long text inputs.
 
 ## 🚀 Features
-- **AI Integration:** Powered by Google Gemini API (`gemini-1.5-flash` model).
+- **AI Integration:** Powered by Google Gemini API (`gemini-2.0-flash` model).
 - **Custom Summaries:** Supports short, medium, and long summary lengths.
 - **Security:** Includes rate limiting (max 10 requests/min per IP) and restricted CORS.
 - **Input Validation:** Prevents empty requests and limits text length to 10,000 characters to save API costs.
