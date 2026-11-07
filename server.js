@@ -56,19 +56,41 @@ app.post('/api/summarize', async (req, res) => {
         instructions = "Provide a comprehensive bullet-point summary.";
     }
 
-    try {
-        // Fixed Model Name: gemini-3.8-flash (Latest and Fastest)
-        const response = await ai.models.generateContent({
-            model: 'gemini-3.8-flash', 
-            contents: `${instructions}\n\nText:\n${text}`,
-        });
+        // 🚀 Retry Logic with Exponential Backoff
+    let lastError;
+    for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+            const response = await ai.models.generateContent({
+                model: 'gemini-3.8-flash',
+                contents: `${instructions}\n\nText:\n${text}`,
+            });
 
-        res.json({ summary: response.text });
-    } catch (error) {
-        console.error("AI Error Logged Internally:", error);
-        // Send generic error to user to prevent leaking system info
-        res.status(500).json({ error: 'Failed to generate summary. Please try again later.' });
+            // اگر کامیاب ہو گیا تو جواب بھیج کر فنکشن ختم کر دیں
+            return res.json({ summary: response.text });
+
+        } catch (error) {
+            lastError = error;
+            console.error(`Attempt ${attempt} failed:`, error.message);
+
+            // اگر 503 (High Demand) یا 429 (Rate Limit) کا ایرر ہے تو دوبارہ کوشش کریں
+            if (error.status === 503 || error.status === 429) {
+                if (attempt < 3) {
+                    console.log(`Model is busy. Waiting 3 seconds before retry...`);
+                    // 3 سیکنڈ کا انتظار کریں (Exponential Backoff)
+                    await new Promise(resolve => setTimeout(resolve, 3000)); 
+                    continue; // اگلی کوشش پر جائیں
+                }
+            }
+            // اگر کوئی اور ایرر ہے تو لوپ توڑ دیں
+            break; 
+        }
     }
+
+    // اگر تینوں کوششیں ناکام ہو جائیں تو صارف کو ایرر بھیجیں
+    console.error("AI Error Logged Internally after retries:", lastError);
+    res.status(500).json({ 
+        error: 'The AI model is currently experiencing high demand. Please try again in a few moments.' 
+    });
 });
 
 const PORT = process.env.PORT || 5000;
