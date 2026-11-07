@@ -57,9 +57,9 @@ app.post('/api/summarize', async (req, res) => {
     }
 
     try {
-        // Fixed Model Name: gemini-2.0-flash (Latest and Fastest)
+        // Fixed Model Name: gemini-3.8-flash (Latest and Fastest)
         const response = await ai.models.generateContent({
-            model: 'gemini-2.0-flash', 
+            model: 'gemini-3.8-flash', 
             contents: `${instructions}\n\nText:\n${text}`,
         });
 
